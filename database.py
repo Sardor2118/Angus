@@ -56,7 +56,7 @@ def get_user_name(user_id):
     sql = connection.cursor()
     sql.execute('SELECT name FROM users WHERE user_id = ?;', (user_id, )).fetchone()
     result = sql.fetchone()
-    return result[0]
+    return result
 def get_location(user_id):
     connection = sqlite3.connect("baza_dannix.db")
     sql = connection.cursor()

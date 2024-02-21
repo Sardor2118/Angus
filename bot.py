@@ -128,7 +128,7 @@ def get_number_uz(message, work):
         bot.register_next_step_handler(message, get_number, work)
 
 @bot.callback_query_handler(lambda call: call.data in ['pay', 'feedback', 'click', 'payme', 'paynet', 'zaplatil', 'otmenit', 'skinul',
-                                                       'pay_uz', 'feedback_uz', 'click_uz', 'payme_uz', 'paynet_uz', 'zaplatil_uz', 'otmena', 'tashladim', 'toladim'])
+                                                       'pay_uz', 'feedback_uz', 'click_uz', 'payme_uz', 'paynet_uz', 'zaplatil_uz', 'otmena', 'tashladim', 'toladim', 'back'])
 def pay_answer(call):
     user_id = call.message.chat.id
     if call.data == 'pay':
@@ -218,6 +218,11 @@ Palonchiev''', reply_markup=buttons.oplata_otmen_uz())
 Имя: {database.get_user_name(user_id)}
 Телефонный номер: {database.get_number(user_id)}
 Район: {database.get_location(user_id)}''')
+    elif call.data =='back':
+        bot.send_photo(user_id, photo=open('photo_2024-02-20_23-47-23.jpg', 'rb'),
+                           caption=f'Здравствуйте, дорогой {database.get_user_name(user_id)}! \n'
+                                   f'Добро пожаловать в мясной интернет-магазин <Angus>! \n'
+                                   f'Используйте нужные вам разделы:', reply_markup=buttons.main_menu())
 
 @bot.message_handler(content_types=['text'])
 def choosing_payment(message):
@@ -238,7 +243,7 @@ def feedback_fc(message):
     user_id = message.from_user.id
     bot.send_message(-1001996929800, f" Отзыв: {message.text}\n"
                                      f"Айди пользователя: {user_id}" f"Телефон номер: {database.get_number(user_id)}")
-    bot.send_photo(user_id, photo=open('photo_2024-02-20_23-47-23.jpg', 'rb'), caption=f'Здравствуйте, дорогой {database.get_user_name(user_id)}! \n'
+    bot.send_photo(user_id, photo=open('photo_2024-02-20_23-47-23.jpg', 'rb'), caption=f'Здравствуйте, дорогой {database.get_user_name(user_id)[0]}! \n'
                                                                                        f'Добро пожаловать в мясной интернет-магазин <Angus>! \n'
                                                                                        f'Используйте нужные вам разделы:',
                    reply_markup=buttons.pay_feedback())
@@ -246,7 +251,7 @@ def feedback_fc(message):
 
 def main_menu(message):
     user_id = message.from_user.id
-    bot.send_photo(user_id, photo=open('photo_2024-02-20_23-47-23.jpg', 'rb'), caption=f'Здравствуйте, дорогой {database.get_user_name(user_id)}! \n'
+    bot.send_photo(user_id, photo=open('photo_2024-02-20_23-47-23.jpg', 'rb'), caption=f'Здравствуйте, дорогой {database.get_user_name(user_id)[0]}! \n'
                                                                                        f'Добро пожаловать в мясной интернет-магазин <Angus>! \n'
                                                                                        f'Используйте нужные вам разделы:')
 
