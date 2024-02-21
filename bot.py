@@ -158,7 +158,7 @@ Palonchiev''', reply_markup=buttons.oplata_otmen())
         bot.send_message(user_id, "Скиньте чек оплаты сюда: @adminangus", reply_markup=buttons.oplata())
     elif call.data == 'otmenit':
         bot.send_photo(user_id, photo=open('photo_2024-02-20_23-47-23.jpg', 'rb'),
-                       caption=f'Здравствуйте, дорогой {database.get_user_name(user_id)}!\n'
+                       caption=f'Здравствуйте, дорогой {database.get_user_name(user_id)}! \n'
                                f'Добро пожаловать в мясной интернет-магазин <Angus>!\n'
                                f'Используйте нужные вам разделы:',
                        reply_markup=buttons.pay_feedback())
