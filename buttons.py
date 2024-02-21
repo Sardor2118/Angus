@@ -8,6 +8,11 @@ def get_phone_number():
     return kb
 def get_phone_number_uz():
     kb = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    phone_number = types.KeyboardButton(text="Nomerim jo'natish 📲", request_contact=True)
+    kb.add(phone_number)
+    return kb
+def get_phone_number_uz():
+    kb = types.ReplyKeyboardMarkup(resize_keyboard=True)
     phone_number = types.KeyboardButton(text="Telefon raqamingizni jo'nating 📲", request_contact=True)
     kb.add(phone_number)
     return kb
@@ -37,10 +42,12 @@ def work_kb_uz():
     rayon2 = types.InlineKeyboardButton("Markaziy harbiy kasalxona", callback_data='Markaziy harbiy kasalxona')
     rayon3 = types.InlineKeyboardButton("XHK Boshqarmasi", callback_data='XHK Boshqarmasi')
     rayon4 = types.InlineKeyboardButton("Qurolli Kuchlar Akademiyas", callback_data='Qurolli Kuchlar Akademiyas')
+    kb.add(rayon4, rayon1, rayon2, rayon3)
+    return kb
 def pay_feedback_uz():
     kb = types.InlineKeyboardMarkup(row_width=1)
-    pay = types.InlineKeyboardButton('Qarzdorlikni yopish', callback_data='pay')
-    feedback = types.InlineKeyboardButton('Izoh qoldirish', callback_data='feedback')
+    pay = types.InlineKeyboardButton('Qarzdorlikni yopish', callback_data='pay_uz')
+    feedback = types.InlineKeyboardButton('Izoh qoldirish', callback_data='feedback_uz')
     kb.add(pay, feedback)
     return kb
 def pay_feedback():
@@ -59,6 +66,13 @@ def payment():
     click = types.InlineKeyboardButton('Click', callback_data='click')
     payme = types.InlineKeyboardButton('Payme', callback_data='payme')
     paynet = types.InlineKeyboardButton('Paynet', callback_data='paynet')
+    kb.add(click, payme, paynet)
+    return kb
+def payment_uz():
+    kb = types.InlineKeyboardMarkup(row_width=1)
+    click = types.InlineKeyboardButton('Click', callback_data='click_uz')
+    payme = types.InlineKeyboardButton('Payme', callback_data='payme_uz')
+    paynet = types.InlineKeyboardButton('Paynet', callback_data='paynet_uz')
     kb.add(click, payme, paynet)
     return kb
 def oplata_otmen_uz():

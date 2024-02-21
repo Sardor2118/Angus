@@ -24,10 +24,10 @@ def start(message):
         check_user = database.check_users(user_id)
         bot.send_message(user_id, "Выберите действие", reply_markup=buttons.main_menu())
     elif language == "Uzb 🇺🇿":
-        mm = bot.send_message(user_id, "Бош меню", reply_markup=types.ReplyKeyboardRemove())
+        mm = bot.send_message(user_id, "Bosh menyu", reply_markup=types.ReplyKeyboardRemove())
         bot.delete_message(user_id, mm.message_id)
         check_user = database.check_users(user_id)
-        bot.send_message(user_id, "Ҳаракатни танланг",
+        bot.send_message(user_id, "Xarakatni tanlang",
                          reply_markup=buttons.main_menu())
 
 
@@ -38,12 +38,16 @@ def registration(message):
         bot.send_message(user_id, "Напишите своё имя: ")
         bot.register_next_step_handler(message, get_name, language)
     elif message.text == "O'zbek tili 🇺🇿":
-        database.add_user(user_id, "uzb")
-        mm = bot.send_message(user_id, "Bosh menyu", reply_markup=types.ReplyKeyboardRemove())
-        bot.delete_message(user_id, mm.message_id)
-        check_users = database.check_users(user_id)
-        bot.send_message(user_id, "Xarakatni tanlang",
-                         reply_markup=buttons.main_menu(check_users))
+        language = "Uzb"
+        bot.send_message(user_id, "Ismingizni kiriting: ")
+        bot.register_next_step_handler(message, get_name_uz, language)
+        # database.add_user(user_id, "uzb")
+    # elif message.text ==
+    #     mm = bot.send_message(user_id, "Bosh menyu", reply_markup=types.ReplyKeyboardRemove())
+    #     bot.delete_message(user_id, mm.message_id)
+    #     check_users = database.check_users(user_id)
+    #     bot.send_message(user_id, "Xarakatni tanlang",
+    #                      reply_markup=buttons.main_menu(check_users))
     else:
         bot.send_message(user_id, "Выберите язык из списка в меню / Tilni menudan tanlang",
                          reply_markup=buttons.language_kb())
@@ -60,16 +64,17 @@ def get_name_uz(message, language):
     users[user_id] = [name, language]
     bot.send_message(user_id, "Ish joyingizni kiriting: ", reply_markup=buttons.work_kb_uz())
 
-@bot.callback_query_handler(lambda call: call.data in ['Чирчик', 'ВВС Управление', 'Академия Вооруженных Сил', 'Центральный военный госпиталь'])
+@bot.callback_query_handler(lambda call: call.data in ['Чирчик', 'ВВС Управление', 'Академия Вооруженных Сил', 'Центральный военный госпиталь',
+                                                       'Chirchiq', 'Markaziy harbiy kasalxona', 'XHK Boshqarmasi', 'Qurolli Kuchlar Akademiyas'])
 def get_work(call):
     user_id = call.message.chat.id
     work = call.data
     if users.get(user_id)[1] == "Rus":
         bot.send_message(user_id, "Отправьте свой номер телефона: ", reply_markup=buttons.get_phone_number())
         bot.register_next_step_handler(call.message, get_number, work)
-    else:
-        bot.send_message(user_id, "Telefon raqamingizni jo'nating: ", reply_markup=buttons.get_phone_number())
-        bot.register_next_step_handler(call.message, get_number, work)
+    elif users.get(user_id)[1] == "Uzb":
+        bot.send_message(user_id, "Telefon raqamingizni jo'nating: ", reply_markup=buttons.get_phone_number_uz())
+        bot.register_next_step_handler(call.message, get_number_uz, work)
 def get_number(message, work):
     user_id = message.from_user.id
     if user_id in users:
@@ -84,7 +89,7 @@ def get_number(message, work):
                                              f"Контактный номер: {phone_number} \n"
                                              f"Аккаунт: @{message.from_user.username}", reply_markup=types.ReplyKeyboardRemove())
             # users.pop(user_id)
-            database.get_users()
+            print(database.get_users())
             bot.send_photo(user_id, photo=open('photo_2024-02-20_23-47-23.jpg', 'rb'), caption='Здравсвуйте',
                            reply_markup=buttons.pay_feedback())
             print(users)
@@ -94,6 +99,16 @@ def get_number(message, work):
         bot.send_message(user_id, "Отправьте свой номер через кнопку")
         bot.register_next_step_handler(message, get_number, work)
 
+# @bot.callback_query_handler(lambda call: call.data in ['Chirchiq', 'Markaziy harbiy kasalxona', 'XHK Boshqarmasi', 'Qurolli Kuchlar Akademiyas'])
+# def get_work_uz(call):
+#     user_id = call.message.chat.id
+#     work = call.data
+#     if users.get(user_id)[1] == "Uzb":
+#         bot.send_message(user_id, "Telefon raqamingizni jo'nating: ", reply_markup=buttons.get_phone_number_uz())
+#         bot.register_next_step_handler(call.message, get_number_uz, work)
+#     else:
+#         bot.send_message(user_id, "Telefon raqamingizni jo'nating: ", reply_markup=buttons.get_phone_number_uz())
+#         bot.register_next_step_handler(call.message, get_number_uz, work)
 def get_number_uz(message, work):
     user_id = message.from_user.id
     if user_id in users:
@@ -116,7 +131,8 @@ def get_number_uz(message, work):
         bot.send_message(user_id, "Telefon raqamingizni jo'nating")
         bot.register_next_step_handler(message, get_number, work)
 
-@bot.callback_query_handler(lambda call: call.data in ['pay', 'feedback', 'click', 'payme', 'paynet', 'zaplatil', 'otmenit', 'skinul'])
+@bot.callback_query_handler(lambda call: call.data in ['pay', 'feedback', 'click', 'payme', 'paynet', 'zaplatil', 'otmenit', 'skinul',
+                                                       'pay_uz', 'feedback_uz', 'click_uz', 'payme_uz', 'paynet_uz', 'zaplatil_uz', 'otmena', 'tashladim', 'toladim'])
 def pay_answer(call):
     user_id = call.message.chat.id
     if call.data == 'pay':
@@ -158,6 +174,46 @@ Palonchiev''', reply_markup=buttons.oplata_otmen())
 Имя:{database.get_user_name(user_id)}
 Телефонный номер:{database.get_number(user_id)}
 Район:{database.get_location(user_id)}''')
+    elif call.data == 'pay_uz':
+        bot.send_message(user_id, "Siz to'laydigan miqdorni kiriting::\n"
+                                  "Shakli: 100.000 so'm", reply_markup=buttons.back())
+        bot.register_next_step_handler(call.message, choosing_payment_uz)
+    elif call.data == 'feedback_uz':
+        bot.send_message(user_id, "O'z izohinggizni qoldirishinggiz mumkun: ", reply_markup=buttons.back())
+        bot.register_next_step_handler(call.message, feedback_fc)
+        # bot.send_photo(user_id, photo=open('photo_2024-02-20_23-47-23.jpg', 'rb'), caption='Здравствуйте',
+        #                reply_markup=buttons.pay_feedback())
+    elif call.data == 'click_uz':
+        bot.send_message(user_id, f'''
+        Ismingiz: {users.get(user_id)[0]};
+{users.get(user_id)[0]} miqdorni ushbu hamyonga o'tkazing:
+1234 5678 1234 5678
+Palonchiev''', reply_markup=buttons.oplata_otmen_uz())
+    elif call.data == 'payme_uz':
+        bot.send_message(user_id, f'''Ismingiz: {users.get(user_id)[0]};
+{users.get(user_id)[0]} miqdorni ushbu hamyonga o'tkazing:
+1234 5678 1234 5678
+Palonchiev''', reply_markup=buttons.oplata_otmen_uz())
+    elif call.data == 'paynet_uz':
+        bot.send_message(user_id, f'''Ismingiz: {database.get_user_name()};
+{call.message} miqdorni ushbu hamyonga o'tkazing:
+1234 5678 1234 5678
+Palonchiev''', reply_markup=buttons.oplata_otmen_uz())
+    elif call.data == 'toladim':
+        bot.send_message(user_id, text="To'lov chekini ushbu adminga yuboring: @adminangus",
+                         reply_markup=buttons.oplata_uz())
+    elif call.data == 'otmena':
+        bot.send_photo(user_id, photo=open('photo_2024-02-20_23-47-23.jpg', 'rb'), caption='Assalomu aleykum',
+                       reply_markup=buttons.pay_feedback_uz())
+        bot.register_next_step_handler(call.data, feedback_fc)
+    elif call.data == 'tashladim':
+        bot.send_message(user_id, "To'lov uchun rahmat!")
+        bot.send_photo(user_id, photo=open('photo_2024-02-20_23-47-23.jpg', 'rb'), caption='Assalomu aleykum',
+                       reply_markup=buttons.pay_feedback_uz())
+        bot.send_message(-1001996929800, f'''Заплата за долг: {users.get(user_id)[0]}
+Имя:{database.get_user_name(user_id)}
+Телефонный номер:{database.get_number(user_id)}
+Район:{database.get_location(user_id)}''')
 
 @bot.message_handler(content_types=['text'])
 def choosing_payment(message):
@@ -166,6 +222,13 @@ def choosing_payment(message):
     users[user_id] = lend
     print(users)
     bot.send_message(user_id, "Через какую платформу хотите заплатить?", reply_markup=buttons.payment())
+@bot.message_handler(content_types=['text'])
+def choosing_payment_uz(message):
+    user_id = message.from_user.id
+    lend = [message.text]
+    users[user_id] = lend
+    print(users)
+    bot.send_message(user_id, "Qaysi platforma orqali pul to'lamoxchisiz?", reply_markup=buttons.payment_uz())
 
 def feedback_fc(message):
     user_id = message.from_user.id
