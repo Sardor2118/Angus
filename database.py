@@ -12,7 +12,8 @@ sql.execute('CREATE TABLE IF NOT EXISTS work (user_id INTEGER, rayon1 TEXT, rayo
 def add_user(user_id, user_name, user_phone_number, user_work, language):
     connection = sqlite3.connect("baza_dannix.db")
     sql = connection.cursor()
-    sql.execute('INSERT INTO users (user_id, name, phone_number, work, language, reg_date) VALUES (?, ?, ?, ?, ?, ?);',(user_id, user_name, user_phone_number, user_work, language, datetime.now()))
+    sql.execute('INSERT INTO users (user_id, name, phone_number, work, language, reg_date) VALUES (?, ?, ?, ?, ?, ?);',
+                (user_id, user_name, user_phone_number, user_work, language, datetime.now()))
     
 def get_users():
     connection = sqlite3.connect("baza_dannix.db")
@@ -49,6 +50,18 @@ def from_work(user_id):
 def get_user_name(user_id):
     connection = sqlite3.connect("baza_dannix.db")
     sql = connection.cursor()
-    sql.execute('SELECT name FROM users WHERE user_id = ?;', (user_id, ))
+    sql.execute('SELECT name FROM users WHERE user_id = ?;', (user_id, )).fetchone()
+    result = sql.fetchone()
+    return result
+def get_location(user_id):
+    connection = sqlite3.connect("baza_dannix.db")
+    sql = connection.cursor()
+    sql.execute('SELECT work FROM users WHERE user_id = ?;', (user_id, )).fetchone()
+    result = sql.fetchone()
+    return result
+def get_number(user_id):
+    connection = sqlite3.connect("baza_dannix.db")
+    sql = connection.cursor()
+    sql.execute('SELECT phone_number FROM users WHERE user_id = ?;', (user_id, )).fetchone()
     result = sql.fetchone()
     return result

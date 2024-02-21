@@ -12,8 +12,8 @@ def get_phone_number_uz():
     kb.add(phone_number)
     return kb
 def main_menu():
-    kb - types.ReplyKeyboardMarkup(row_width=1)
-    main_menu = types.InlineKeyboardMarkup(text="Закрыть задолженность", callback_data='')
+    kb = types.ReplyKeyboardMarkup(row_width=1)
+    main_menu = types.InlineKeyboardMarkup(text="Закрыть задолженность", callback_data='main_menu')
     feedback = types.InlineKeyboardMarkup(text="Оставьте отзыв", callback_data='feedback')
     kb.add(main_menu, feedback)
     return kb
@@ -43,6 +43,12 @@ def pay_feedback_uz():
     feedback = types.InlineKeyboardButton('Izoh qoldirish', callback_data='feedback')
     kb.add(pay, feedback)
     return kb
+def pay_feedback():
+    kb = types.InlineKeyboardMarkup(row_width=1)
+    pay = types.InlineKeyboardButton('Погасить долг', callback_data='pay')
+    feedback = types.InlineKeyboardButton('Оставить отзыв', callback_data='feedback')
+    kb.add(pay, feedback)
+    return kb
 def back():
     kb = types.InlineKeyboardMarkup(row_width=1)
     back = types.InlineKeyboardButton('Назад', callback_data='back')
@@ -61,8 +67,19 @@ def oplata_otmen_uz():
     otmena = types.InlineKeyboardButton("Bekor qilish", callback_data="otmena")
     kb.add(toladim, otmena)
     return kb
+def oplata_otmen():
+    kb = types.InlineKeyboardMarkup(row_width=1)
+    zaplatil = types.InlineKeyboardButton("Заплатил", callback_data="zaplatil")
+    otmenit = types.InlineKeyboardButton("Отменить", callback_data="otmenit")
+    kb.add(zaplatil, otmenit)
+    return kb
 def oplata_uz():
     kb = types.InlineKeyboardMarkup(row_width=1)
     toladim = types.InlineKeyboardButton("Tashladim", callback_data="tashladim")
+    kb.add(toladim)
+    return kb
+def oplata():
+    kb = types.InlineKeyboardMarkup(row_width=1)
+    toladim = types.InlineKeyboardButton("Скинул", callback_data="skinul")
     kb.add(toladim)
     return kb
