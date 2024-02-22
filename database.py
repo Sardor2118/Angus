@@ -48,7 +48,7 @@ def work(user_id, rayon1='Район 1', rayon2='Район 2', rayon3='Райо
 def from_work(user_id):
     connection = sqlite3.connect("baza_dannix.db")
     sql = connection.cursor()
-    sql.execute('SELECT * FROM work WHERE user_id = ?;', (user_id, )).fetchone()
+    sql.execute('SELECT * FROM work WHERE user_id = ?;', (user_id, ))
     result = sql.fetchone()
     return result
 def get_user_name(user_id):
@@ -63,12 +63,15 @@ def get_user_name(user_id):
 def get_location(user_id):
     connection = sqlite3.connect("baza_dannix.db")
     sql = connection.cursor()
-    sql.execute('SELECT work FROM users WHERE user_id = ?;', (user_id, )).fetchone()
+    sql.execute('SELECT work FROM users WHERE user_id = ?;', (user_id, ))
     result = sql.fetchone()
     return result
 def get_number(user_id):
     connection = sqlite3.connect("baza_dannix.db")
     sql = connection.cursor()
-    sql.execute('SELECT phone_number FROM users WHERE user_id = ?;', (user_id, )).fetchone()
+    sql.execute('SELECT phone_number FROM users WHERE user_id = ?', (user_id, ))
     result = sql.fetchone()
-    return result
+    if result:
+        return result[0]
+    else:
+        return None

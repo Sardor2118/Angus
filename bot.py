@@ -29,7 +29,7 @@ def registration(message):
     user_id = message.from_user.id
     if message.text == "Русский язык 🇷🇺":
         language = "Rus"
-        bot.send_message(user_id, "Напишите своё имя: ")
+        bot.send_message(user_id, "Напишите своё Имя Фамилию: ")
         bot.register_next_step_handler(message, get_name, language)
     elif message.text == "O'zbek tili 🇺🇿":
         language = "Uzb"
@@ -99,7 +99,7 @@ def get_number(message, work):
             # main_menu(message)
             bot.send_photo(user_id, photo=open('photo_2024-02-20_23-47-23.jpg', 'rb'),
                            caption=f'Здравствуйте, дорогой {database.get_user_name(user_id)}! \n'
-                                   f'Добро пожаловать в мясной интернет-магазин <Angus>! \n'
+                                   f'Добро пожаловать в мясной интернет-магазин "Angus"! \n'
                                    f'Используйте нужные вам разделы:',
                            reply_markup=buttons.pay_feedback())
             print(database.get_users())
@@ -124,7 +124,7 @@ def get_number_uz(message, work):
             database.get_users()
             bot.send_photo(user_id, photo=open('photo_2024-02-20_23-47-23.jpg', 'rb'),
                            caption=f"Assalomu aleykum, xurmatli {database.get_user_name(user_id)}! \n"
-                                   f"<Angus> Onlayn go'sht do'koniga xush kelibsiz! \n"
+                                   f"'Angus' Onlayn Go'sht do'koniga xush kelibsiz! \n"
                                    f"Sizga kerak bo'lgan bo'limlardan foydalaning:",
                            reply_markup=buttons.pay_feedback_uz())
             print(users)
@@ -145,101 +145,100 @@ def pay_answer(call):
         bot.register_next_step_handler(call.message, choosing_payment)
     elif call.data == 'feedback':
         bot.send_message(user_id, "Оставьте свой отзыв или письмо админу: ", reply_markup=buttons.back())
-        if call.message.text:
+        if call.message:
             bot.register_next_step_handler(call.message, feedback_fc)
 
     elif call.data == 'click':
         bot.send_message(user_id, f'''
         Ваше имя: {database.get_user_name(user_id)[0]};
 Скиньте сумму {users.get(user_id)[0]} в этот кошелёк:
-1234 5678 1234 5678
-Palonchiev''', reply_markup=buttons.oplata_otmen())
+8600332986772477
+Норбобоева Лилия''', reply_markup=buttons.oplata_otmen())
     elif call.data == 'payme':
         bot.send_message(user_id, f'''Ваше имя: {database.get_user_name(user_id)};
 Скиньте сумму {users.get(user_id)[0]} в этот кошелёк:
-1234 5678 1234 5678
-Palonchiev''', reply_markup=buttons.oplata_otmen())
+8600332986772477
+Норбобоева Лилия''', reply_markup=buttons.oplata_otmen())
     elif call.data == 'paynet':
         bot.send_message(user_id, f'''Ваше имя: {database.get_user_name(user_id)};
 Скиньте сумму {users.get(user_id)[0]} в этот кошелёк:
-1234 5678 1234 5678
-Palonchiev''', reply_markup=buttons.oplata_otmen())
+8600332986772477
+Норбобоева Лилия''', reply_markup=buttons.oplata_otmen())
     elif call.data == 'zaplatil':
-        bot.send_message(user_id, "Скиньте чек оплаты сюда: @adminangus", reply_markup=buttons.oplata())
+        bot.send_message(user_id, "Скиньте чек оплаты сюда: @adminangus 🟢", reply_markup=buttons.oplata())
     elif call.data == 'otmenit':
         bot.send_photo(user_id, photo=open('photo_2024-02-20_23-47-23.jpg', 'rb'),
                        caption=f'Здравствуйте, дорогой {database.get_user_name(user_id)}! \n'
-                               f'Добро пожаловать в мясной интернет-магазин <Angus>!\n'
+                               f'Добро пожаловать в мясной интернет-магазин "Angus"!\n'
                                f'Используйте нужные вам разделы:',
                        reply_markup=buttons.pay_feedback())
         # bot.register_next_step_handler(call.data, feedback_fc)
     elif call.data == 'skinul':
-        bot.send_message(user_id, "Спасибо за платёж!")
+        bot.send_message(user_id, "Спасибо за платёж! Наши админы скоро просмотрят и зачеркнут ваш долг ✅")
         bot.send_photo(user_id, photo=open('photo_2024-02-20_23-47-23.jpg', 'rb'),
                        caption=f'Здравствуйте, дорогой {database.get_user_name(user_id)}! \n'
-                            f'Добро пожаловать в мясной интернет-магазин <Angus>! \n'
+                            f'Добро пожаловать в мясной интернет-магазин "Angus"! \n'
                             f'Используйте нужные вам разделы:',
                        reply_markup=buttons.pay_feedback())
-        bot.send_message(-1001996929800, f''' Заплата за долг: {users.get(user_id)}
+        bot.send_message(-1001996929800, f''' Заплата за долг: {users.get(user_id)[0]} сум
 Имя: {database.get_user_name(user_id)}
 Телефонный номер: {database.get_number(user_id)}
-Район: {database.get_location(user_id)}''')
+Район: {database.get_location(user_id)[0]}''')
     elif call.data == 'pay_uz':
         bot.send_message(user_id, "Siz to'laydigan miqdorni kiriting::\n"
                                   "Shakli: 100.000 so'm", reply_markup=buttons.back_uz())
-
         bot.register_next_step_handler(call.message, choosing_payment_uz)
     elif call.data == 'feedback_uz':
         bot.send_message(user_id, "O'z izohinggizni qoldirishinggiz mumkun: ", reply_markup=buttons.back_uz())
-        if call.message.text:
-            bot.register_next_step_handler(call.message, feedback_fc)
+        if call.message:
+            bot.register_next_step_handler(call.message, feedback_fc_uz)
     elif call.data == 'click_uz':
         bot.send_message(user_id, f'''
-        Ismingiz: {database.get_user_name(user_id)};
+        Ismingiz: {database.get_user_name(user_id)}
 {users.get(user_id)[0]} miqdorni ushbu hamyonga o'tkazing:
-1234 5678 1234 5678
-Palonchiev''', reply_markup=buttons.oplata_otmen_uz())
+8600332986772477
+Норбобоева Лилия''', reply_markup=buttons.oplata_otmen_uz())
     elif call.data == 'payme_uz':
-        bot.send_message(user_id, f'''Ismingiz: {database.get_user_name(user_id)};
+        bot.send_message(user_id, f'''Ismingiz: {database.get_user_name(user_id)}
 {users.get(user_id)[0]} miqdorni ushbu hamyonga o'tkazing:
-1234 5678 1234 5678
-Palonchiev''', reply_markup=buttons.oplata_otmen_uz())
+8600332986772477
+Норбобоева Лилия''', reply_markup=buttons.oplata_otmen_uz())
     elif call.data == 'paynet_uz':
-        bot.send_message(user_id, f'''Ismingiz: {database.get_user_name(user_id)};
+        bot.send_message(user_id, f'''Ismingiz: {database.get_user_name(user_id)}
 {users.get(user_id)[0]} miqdorni ushbu hamyonga o'tkazing:
-1234 5678 1234 5678
-Palonchiev''', reply_markup=buttons.oplata_otmen_uz())
+8600332986772477
+Норбобоева Лилия''', reply_markup=buttons.oplata_otmen_uz())
     elif call.data == 'toladim':
-        bot.send_message(user_id, text="To'lov chekini ushbu adminga yuboring: @adminangus",
+        bot.send_message(user_id, text="To'lov chekini ushbu adminga yuboring: @adminangus 🟢",
                          reply_markup=buttons.oplata_uz())
     elif call.data == 'otmena':
         bot.send_photo(user_id, photo=open('photo_2024-02-20_23-47-23.jpg', 'rb'),
                        caption=f"Assalomu aleykum, xurmatli {database.get_user_name(user_id)}! \n"
-                               f"<Angus> Onlayn go'sht do'koniga xush kelibsiz! \n"
+                               f"'Angus' Onlayn go'sht do'koniga xush kelibsiz! \n"
                                f"Sizga kerak bo'lgan bo'limlardan foydalaning:",
                        reply_markup=buttons.pay_feedback_uz())
-        bot.register_next_step_handler(call.data, feedback_fc)
+        # bot.register_next_step_handler(call.data, feedback_fc)
     elif call.data == 'tashladim':
-        bot.send_message(user_id, "To'lov uchun rahmat!")
+        bot.send_message(user_id, "To'lov uchun rahmat! Adminlarimiz tez orada ko'rib chiqishadi va qarzingizni o'chirib tashlashadi ✅")
         bot.send_photo(user_id, photo=open('photo_2024-02-20_23-47-23.jpg', 'rb'),
                        caption=f"Assalomu aleykum, xurmatli {database.get_user_name(user_id)}! \n"
-                               f"<Angus> Onlayn go'sht do'koniga xush kelibsiz! \n"
+                               f"'Angus' Onlayn Go'sht do'koniga xush kelibsiz! \n"
                                f"Sizga kerak bo'lgan bo'limlardan foydalaning:",
                        reply_markup=buttons.pay_feedback_uz())
-        bot.send_message(-1001996929800, f'''Заплата за долг: {users.get(user_id)}
+        bot.send_message(-1001996929800, f'''Заплата за долг: {users.get(user_id)[0]} сум
 Имя: {database.get_user_name(user_id)}
 Телефонный номер: {database.get_number(user_id)}
-Район: {database.get_location(user_id)}''')
+Район: {database.get_location(user_id)[0]}''')
     elif call.data =='back':
         bot.send_photo(user_id, photo=open('photo_2024-02-20_23-47-23.jpg', 'rb'),
                            caption=f'Здравствуйте, дорогой {database.get_user_name(user_id)}! \n'
-                                   f'Добро пожаловать в мясной интернет-магазин <Angus>! \n'
+                                   f'Добро пожаловать в мясной интернет-магазин "Angus"! \n'
                                    f'Используйте нужные вам разделы:', reply_markup=buttons.pay_feedback())
     elif call.data == 'orqaga':
         bot.send_photo(user_id, photo=open('photo_2024-02-20_23-47-23.jpg', 'rb'),
-                       caption=f'Assalomu aleykum, дорогой {database.get_user_name(user_id)}! \n'
-                               f'Добро пожаловать в мясной интернет-магазин <Angus>! \n'
-                               f'Используйте нужные вам разделы:', reply_markup=buttons.pay_feedback_uz())
+                       caption=f"Assalomu aleykum, xurmatli {database.get_user_name(user_id)}! \n"
+                               f"'Angus' Onlayn Go'sht do'koniga xush kelibsiz! \n"
+                               f"Sizga kerak bo'lgan bo'limlardan foydalaning:", reply_markup=buttons.pay_feedback_uz())
 
 # @bot.message_handler(content_types=['text'])
 # def choosing_payment(message):
@@ -258,24 +257,38 @@ Palonchiev''', reply_markup=buttons.oplata_otmen_uz())
 
 def feedback_fc(message):
     user_id = message.from_user.id
-    bot.send_message(-1001996929800, f" Отзыв: {message.text}\n"
-                                     f"Айди пользователя: {user_id}" f"Телефон номер: {database.get_number(user_id)}")
-    bot.send_photo(user_id, photo=open('photo_2024-02-20_23-47-23.jpg', 'rb'), caption=f'Здравствуйте, дорогой {database.get_user_name(user_id)[0]}! \n'
-                                                                                       f'Добро пожаловать в мясной интернет-магазин <Angus>! \n'
+    user_name = message.from_user.username
+    print(database.get_number(user_id))
+    bot.send_message(-1001996929800, f" Отзыв: {message.text}\n \n \n"
+                                     f"Username пользователя: @{user_name}\n \n \n"
+                                     f"Телефон номер: {database.get_number(user_id)}")
+    bot.send_photo(user_id, photo=open('photo_2024-02-20_23-47-23.jpg', 'rb'), caption=f'Здравствуйте, дорогой {database.get_user_name(user_id)}! \n'
+                                                                                       f'Добро пожаловать в мясной интернет-магазин "Angus"! \n'
                                                                                        f'Используйте нужные вам разделы:',
                    reply_markup=buttons.pay_feedback())
+def feedback_fc_uz(message):
+    user_id = message.from_user.id
+    user_name = message.from_user.username
+    print(database.get_number(user_id))
+    bot.send_message(-1001996929800, f" Отзыв: {message.text}\n \n \n"
+                                     f"Username пользователя: @{user_name}\n \n \n"
+                                     f"Телефон номер: {database.get_number(user_id)}")
+    bot.send_photo(user_id, photo=open('photo_2024-02-20_23-47-23.jpg', 'rb'), caption=f"Assalomu aleykum, xurmatli {database.get_user_name(user_id)}! \n"
+                                                                                       f"'Angus' Onlayn Go'sht do'koniga xush kelibsiz! \n"
+                                                                                       f"Sizga kerak bo'lgan bo'limlardan foydalaning:",
+                   reply_markup=buttons.pay_feedback_uz())
 
 def main_menu(message):
     user_id = message.from_user.id
     bot.send_photo(user_id, photo=open('photo_2024-02-20_23-47-23.jpg', 'rb'), caption=f'Здравствуйте, дорогой {database.get_user_name(user_id)}! \n'
-                                                                                       f'Добро пожаловать в мясной интернет-магазин <Angus>! \n'
+                                                                                       f'Добро пожаловать в мясной интернет-магазин "Angus"! \n'
                                                                                        f'Используйте нужные вам разделы:',
                    reply_markup=buttons.pay_feedback())
 def main_menu_uz(message):
     user_id = message.from_user.id
-    bot.send_photo(user_id, photo=open('photo_2024-02-20_23-47-23.jpg', 'rb'), caption=f'Assalomu aleykum, дорогой {database.get_user_name(user_id)}! \n'
-                                                                                       f'Добро пожаловать в мясной интернет-магазин <Angus>! \n'
-                                                                                       f'Используйте нужные вам разделы:',
+    bot.send_photo(user_id, photo=open('photo_2024-02-20_23-47-23.jpg', 'rb'), caption=f"Assalomu aleykum, xurmatli {database.get_user_name(user_id)}! \n"
+                                                                                       f"'Angus' Onlayn Go'sht do'koniga xush kelibsiz! \n"
+                                                                                       f"Sizga kerak bo'lgan bo'limlardan foydalaning:",
                    reply_markup=buttons.pay_feedback_uz())
 
 
