@@ -17,9 +17,9 @@ def get_phone_number_uz():
     kb.add(phone_number)
     return kb
 def main_menu():
-    kb = types.ReplyKeyboardMarkup(row_width=1)
-    main_menu = types.InlineKeyboardMarkup(text="Закрыть задолженность", callback_data='main_menu')
-    feedback = types.InlineKeyboardMarkup(text="Оставьте отзыв", callback_data='feedback')
+    kb = types.InlineKeyboardMarkup(row_width=1)
+    main_menu = types.InlineKeyboardButton(text="Закрыть задолженность", callback_data='main_menu')
+    feedback = types.InlineKeyboardButton(text="Оставьте отзыв", callback_data='feedback')
     kb.add(main_menu, feedback)
     return kb
 def language_kb():
@@ -59,6 +59,11 @@ def pay_feedback():
 def back():
     kb = types.InlineKeyboardMarkup(row_width=1)
     back = types.InlineKeyboardButton('Назад', callback_data='back')
+    kb.add(back)
+    return kb
+def back_uz():
+    kb = types.InlineKeyboardMarkup(row_width=1)
+    back = types.InlineKeyboardButton('Orqaga', callback_data='orqaga')
     kb.add(back)
     return kb
 def payment():

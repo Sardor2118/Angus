@@ -20,7 +20,7 @@ def get_users():
     connection = sqlite3.connect("baza_dannix.db")
     sql = connection.cursor()
     users = sql.execute('SELECT * FROM users;').fetchall()
-    return users[0]
+    return users
 def check_users(user_id):
     connection = sqlite3.connect("baza_dannix.db")
     sql = connection.cursor()
@@ -33,9 +33,9 @@ def check_language(user_id):
     connection = sqlite3.connect("baza_dannix.db")
     sql = connection.cursor()
     checker = sql.execute("SELECT language FROM users WHERE user_id = ?;", (user_id,))
-    if checker.fetchone() == ("uzb",):
+    if checker.fetchone() == ("Uzb",):
         return "uzb"
-    elif checker.fetchone() == ("rus",):
+    elif checker.fetchone() == ("Rus",):
         return "rus"
     return False
 def work(user_id, rayon1='Район 1', rayon2='Район 2', rayon3='Район 3', rayon4='Район 4'):
@@ -50,22 +50,25 @@ def from_work(user_id):
     sql = connection.cursor()
     sql.execute('SELECT * FROM work WHERE user_id = ?;', (user_id, )).fetchone()
     result = sql.fetchone()
-    return result[0]
+    return result
 def get_user_name(user_id):
     connection = sqlite3.connect("baza_dannix.db")
     sql = connection.cursor()
-    sql.execute('SELECT name FROM users WHERE user_id = ?;', (user_id, )).fetchone()
-    result = sql.fetchone()
-    return result
+    sql.execute('SELECT name FROM users WHERE user_id = ?', (user_id,))
+    name = sql.fetchone()
+    if name:
+        return name[0]  # Возвращаем первый элемент кортежа (имя)
+    else:
+        return None
 def get_location(user_id):
     connection = sqlite3.connect("baza_dannix.db")
     sql = connection.cursor()
     sql.execute('SELECT work FROM users WHERE user_id = ?;', (user_id, )).fetchone()
     result = sql.fetchone()
-    return result[0]
+    return result
 def get_number(user_id):
     connection = sqlite3.connect("baza_dannix.db")
     sql = connection.cursor()
     sql.execute('SELECT phone_number FROM users WHERE user_id = ?;', (user_id, )).fetchone()
     result = sql.fetchone()
-    return result[0]
+    return result
