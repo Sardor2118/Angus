@@ -5,7 +5,7 @@ import logging
 from telebot import types
 
 logging.basicConfig(level=logging.INFO)
-bot = telebot.TeleBot("")
+bot = telebot.TeleBot("6986619740:AAFJvNoqZGZZ55C7vlkREEq9wWCQ5Rpll4Y")
 
 users = {}
 print(database.get_users())
@@ -146,7 +146,7 @@ def pay_answer(call):
     elif call.data == 'feedback':
         bot.send_message(user_id, "Оставьте свой отзыв или письмо админу: ", reply_markup=buttons.back())
         if call.message:
-            bot.register_next_step_handler(call.message, feedback_fc)
+            feedback_fc
 
     elif call.data == 'click':
         bot.send_message(user_id, f'''
