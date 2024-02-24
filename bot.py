@@ -3,10 +3,13 @@ import database
 import buttons
 import logging
 from telebot import types
-
 logging.basicConfig(level=logging.INFO)
-bot = telebot.TeleBot("")
 
+
+
+
+
+bot = telebot.TeleBot('6986619740:AAFJvNoqZGZZ55C7vlkREEq9wWCQ5Rpll4Y')
 users = {}
 print(database.get_users())
 
@@ -146,7 +149,7 @@ def pay_answer(call):
     elif call.data == 'feedback':
         bot.send_message(user_id, "Оставьте свой отзыв или письмо админу: ", reply_markup=buttons.back())
         if call.message:
-            feedback_fc
+            bot.register_next_step_handler(call.message, feedback_fc)
 
     elif call.data == 'click':
         bot.send_message(user_id, f'''
@@ -180,10 +183,13 @@ def pay_answer(call):
                             f'Добро пожаловать в мясной интернет-магазин "Angus"! \n'
                             f'Используйте нужные вам разделы:',
                        reply_markup=buttons.pay_feedback())
-        bot.send_message(-1001996929800, f''' Заплата за долг: {users.get(user_id)[0]} сум
-Имя: {database.get_user_name(user_id)}
-Телефонный номер: {database.get_number(user_id)}
-Район: {database.get_location(user_id)[0]}''')
+        bot.send_message(-1001996929800, f'''<b> Заплата за долг:</b> {users.get(user_id)[0]} сум
+        
+<b>Имя:</b> {database.get_user_name(user_id)}
+
+<b>Телефонный номер:</b> {database.get_number(user_id)}
+
+<b>Район:</b> {database.get_location(user_id)[0]}''', parse_mode='HTML')
     elif call.data == 'pay_uz':
         bot.send_message(user_id, "Siz to'laydigan miqdorni kiriting::\n"
                                   "Shakli: 100.000 so'm", reply_markup=buttons.back_uz())
@@ -225,20 +231,26 @@ def pay_answer(call):
                                f"'Angus' Onlayn Go'sht do'koniga xush kelibsiz! \n"
                                f"Sizga kerak bo'lgan bo'limlardan foydalaning:",
                        reply_markup=buttons.pay_feedback_uz())
-        bot.send_message(-1001996929800, f'''Заплата за долг: {users.get(user_id)[0]} сум
-Имя: {database.get_user_name(user_id)}
-Телефонный номер: {database.get_number(user_id)}
-Район: {database.get_location(user_id)[0]}''')
+        bot.send_message(-1001996929800, f'''<b>Заплата за долг:</b> {users.get(user_id)[0]} сум
+        
+<b>Имя:</b> {database.get_user_name(user_id)}
+
+<b>Телефонный номер:</b> {database.get_number(user_id)}
+
+<b>Район:</b> {database.get_location(user_id)[0]}''', parse_mode='HTML')
     elif call.data =='back':
         bot.send_photo(user_id, photo=open('photo_2024-02-20_23-47-23.jpg', 'rb'),
                            caption=f'Здравствуйте, дорогой {database.get_user_name(user_id)}! \n'
                                    f'Добро пожаловать в мясной интернет-магазин "Angus"! \n'
                                    f'Используйте нужные вам разделы:', reply_markup=buttons.pay_feedback())
+        bot.clear_step_handler_by_chat_id(chat_id=call.message.chat.id)
     elif call.data == 'orqaga':
         bot.send_photo(user_id, photo=open('photo_2024-02-20_23-47-23.jpg', 'rb'),
                        caption=f"Assalomu aleykum, xurmatli {database.get_user_name(user_id)}! \n"
                                f"'Angus' Onlayn Go'sht do'koniga xush kelibsiz! \n"
                                f"Sizga kerak bo'lgan bo'limlardan foydalaning:", reply_markup=buttons.pay_feedback_uz())
+        bot.clear_step_handler_by_chat_id(chat_id=call.message.chat.id)
+
 
 # @bot.message_handler(content_types=['text'])
 # def choosing_payment(message):
