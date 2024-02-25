@@ -91,3 +91,9 @@ def get_number(user_id):
         return result[0]
     else:
         return None
+
+def mailing_all():
+    connection = sqlite3.connect("baza_dannix.db")
+    sql = connection.cursor()
+    all_targets = sql.execute("SELECT user_id FROM users;",).fetchall()
+    return all_targets

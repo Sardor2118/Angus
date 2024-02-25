@@ -1,4 +1,5 @@
 from telebot import types
+from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton, ReplyKeyboardMarkup, KeyboardButton
 
 
 def get_phone_number():
@@ -101,4 +102,16 @@ def oplata():
     kb = types.InlineKeyboardMarkup(row_width=1)
     toladim = types.InlineKeyboardButton("Скинул ✅", callback_data="skinul")
     kb.add(toladim)
+    return kb
+def main_admin_menu():
+    kb = InlineKeyboardMarkup(row_width=1)
+    mailing = InlineKeyboardButton(text="📤 Создать рассылку", callback_data="mailing")
+    msg = InlineKeyboardButton(text="👤 Написать пользователю", callback_data="send_message")
+    kb.row(mailing)
+    kb.row(msg)
+    return kb
+def canceling():
+    kb = ReplyKeyboardMarkup(resize_keyboard=True)
+    cancel = KeyboardButton("Отмена❌")
+    kb.add(cancel)
     return kb
