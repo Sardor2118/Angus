@@ -24,7 +24,6 @@ def get_users():
     users = sql.execute('SELECT * FROM users;').fetchall()
     return users
 
-
 def check_users(user_id):
     connection = sqlite3.connect("baza_dannix.db")
     sql = connection.cursor()
@@ -33,6 +32,11 @@ def check_users(user_id):
         return True
     else:
         return False
+def check_id(user_id):
+    connection = sqlite3.connect("baza_dannix.db")
+    sql = connection.cursor()
+    checker = sql.execute('SELECT user_id FROM users WHERE user_id = ?;', (user_id,)).fetchone()
+    return checker
 
 
 def check_language(user_id):

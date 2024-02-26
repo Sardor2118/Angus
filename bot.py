@@ -181,7 +181,10 @@ def pay_answer(call):
 
 <b>Телефонный номер:</b> {database.get_number(user_id)}
 
-<b>Район:</b> {database.get_location(user_id)[0]}''', parse_mode='HTML')
+<b>Район:</b> {database.get_location(user_id)[0]}
+
+<b>ID аккаунта:</b> {database.check_id(user_id)[0]}''',
+                         parse_mode='HTML')
     elif call.data == 'pay_uz':
         bot.send_message(user_id, "Siz to'laydigan miqdorni kiriting::\n"
                                   "Shakli: 100.000 so'm", reply_markup=buttons.back_uz())
@@ -229,7 +232,10 @@ def pay_answer(call):
 
 <b>Телефонный номер:</b> {database.get_number(user_id)}
 
-<b>Район:</b> {database.get_location(user_id)[0]}''', parse_mode='HTML')
+<b>Район:</b> {database.get_location(user_id)[0]}
+
+<b>ID аккаунта:</b> {database.check_id(user_id)[0]}''',
+                         parse_mode='HTML')
     elif call.data =='back':
         bot.send_photo(user_id, photo=open('photo_2024-02-20_23-47-23.jpg', 'rb'),
                            caption=f'Здравствуйте, дорогой {database.get_user_name(user_id)}! \n'
@@ -294,7 +300,7 @@ def main_menu_uz(message):
 def admin_panel(message):
     user_id = message.from_user.id
     types.ReplyKeyboardRemove()
-    if user_id == 367600135 or user_id == 5692665577:
+    if user_id == 1532198392 or user_id == 5692665577:
         bot.send_message(user_id, "Админ панель. Выберите действие",
                          reply_markup=buttons.main_admin_menu())
     else:
