@@ -2,6 +2,8 @@ import telebot
 import database
 import buttons
 import logging
+import threading
+import time
 from telebot import types
 logging.basicConfig(level=logging.INFO)
 
@@ -36,12 +38,6 @@ def registration(message):
         bot.send_message(user_id, "Ismingizni kiriting: ")
         bot.register_next_step_handler(message, get_name_uz, language)
         # database.add_user(user_id, "uzb")
-    # elif message.text ==
-    #     mm = bot.send_message(user_id, "Bosh menyu", reply_markup=types.ReplyKeyboardRemove())
-    #     bot.delete_message(user_id, mm.message_id)
-    #     check_users = database.check_users(user_id)
-    #     bot.send_message(user_id, "Xarakatni tanlang",
-    #                      reply_markup=buttons.main_menu(check_users))
     else:
         bot.send_message(user_id, "Выберите язык из списка в меню / Tilni menudan tanlang",
                          reply_markup=buttons.language_kb())
@@ -93,10 +89,9 @@ def get_number(message, work):
                                              f"Имя: {users.get(user_id)[0]} \n"
                                              f"Локация: {work} \n"
                                              f"Контактный номер: {phone_number} \n"
-                                             f"Аккаунт: @{message.from_user.username}", reply_markup=types.ReplyKeyboardRemove())
+                                             f"Аккаунт: @{message.from_user.username}" , reply_markup=types.ReplyKeyboardRemove())
             users.pop(user_id)
             print(database.get_user_name(user_id))
-            # main_menu(message)
             bot.send_photo(user_id, photo=open('photo_2024-02-20_23-47-23.jpg', 'rb'),
                            caption=f'Здравствуйте, дорогой {database.get_user_name(user_id)}! \n'
                                    f'Добро пожаловать в мясной интернет-магазин "Angus"! \n'
@@ -136,7 +131,7 @@ def get_number_uz(message, work):
 
 @bot.callback_query_handler(lambda call: call.data in ['pay', 'feedback', 'click', 'payme', 'paynet', 'zaplatil', 'otmenit', 'skinul',
                                                        'pay_uz', 'feedback_uz', 'click_uz', 'payme_uz', 'paynet_uz', 'zaplatil_uz',
-                                                       'otmena', 'tashladim', 'toladim', 'back', 'main_menu', 'orqaga'])
+                                                       'otmena', 'tashladim', 'toladim', 'back', 'main_menu', 'orqaga', 'mailing', 'send_message'])
 def pay_answer(call):
     user_id = call.message.chat.id
     if call.data == 'pay':
@@ -186,7 +181,10 @@ def pay_answer(call):
 
 <b>Телефонный номер:</b> {database.get_number(user_id)}
 
-<b>Район:</b> {database.get_location(user_id)[0]}''', parse_mode='HTML')
+<b>Район:</b> {database.get_location(user_id)[0]}
+
+<b>ID аккаунта:</b> {database.check_id(user_id)[0]}''',
+                         parse_mode='HTML')
     elif call.data == 'pay_uz':
         bot.send_message(user_id, "Siz to'laydigan miqdorni kiriting::\n"
                                   "Shakli: 100.000 so'm", reply_markup=buttons.back_uz())
@@ -234,7 +232,10 @@ def pay_answer(call):
 
 <b>Телефонный номер:</b> {database.get_number(user_id)}
 
-<b>Район:</b> {database.get_location(user_id)[0]}''', parse_mode='HTML')
+<b>Район:</b> {database.get_location(user_id)[0]}
+
+<b>ID аккаунта:</b> {database.check_id(user_id)[0]}''',
+                         parse_mode='HTML')
     elif call.data =='back':
         bot.send_photo(user_id, photo=open('photo_2024-02-20_23-47-23.jpg', 'rb'),
                            caption=f'Здравствуйте, дорогой {database.get_user_name(user_id)}! \n'
@@ -247,22 +248,18 @@ def pay_answer(call):
                                f"'Angus' Onlayn Go'sht do'koniga xush kelibsiz! \n"
                                f"Sizga kerak bo'lgan bo'limlardan foydalaning:", reply_markup=buttons.pay_feedback_uz())
         bot.clear_step_handler_by_chat_id(chat_id=call.message.chat.id)
+    elif call.data == "mailing":
+        bot.delete_message(user_id, call.message.message_id)
+        bot.send_message(user_id,
+                         "Введите текст рассылки или отправьте фотографию с описанием, либо отмените рассылку через кнопку в меню",
+                         reply_markup=buttons.canceling())
+        bot.register_next_step_handler(call.message, mailing_to_all)
+    elif call.data == "send_message":
+        bot.delete_message(user_id, call.message.message_id)
+        bot.send_message(user_id, "Введите айди пользователя, которому вы хотите написать",
+                         reply_markup=buttons.canceling())
+        bot.register_next_step_handler(call.message, send_answer)
 
-
-# @bot.message_handler(content_types=['text'])
-# def choosing_payment(message):
-#     user_id = message.from_user.id
-#     lend = [message.text]
-#     users[user_id] = lend
-#     print(users)
-#     bot.send_message(user_id, "Через какую платформу хотите заплатить?", reply_markup=buttons.payment())
-# @bot.message_handler(content_types=['text'])
-# def choosing_payment_uz(message):
-#     user_id = message.from_user.id
-#     lend = [message.text]
-#     users[user_id] = lend
-#     print(users)
-#     bot.send_message(user_id, "Qaysi platforma orqali pul to'lamoxchisiz?", reply_markup=buttons.payment_uz())
 
 def feedback_fc(message):
     user_id = message.from_user.id
@@ -299,7 +296,72 @@ def main_menu_uz(message):
                                                                                        f"'Angus' Onlayn Go'sht do'koniga xush kelibsiz! \n"
                                                                                        f"Sizga kerak bo'lgan bo'limlardan foydalaning:",
                    reply_markup=buttons.pay_feedback_uz())
-
-
+@bot.message_handler(commands=["admin"])
+def admin_panel(message):
+    user_id = message.from_user.id
+    types.ReplyKeyboardRemove()
+    if user_id == 1532198392 or user_id == 5692665577:
+        bot.send_message(user_id, "Админ панель. Выберите действие",
+                         reply_markup=buttons.main_admin_menu())
+    else:
+        pass
+def send_message_to_user(target_id, text, photo):
+    target = target_id[0]
+    if photo == None:
+        try:
+            time.sleep(0.2)
+            bot.send_message(target, text)
+        except:
+            pass
+    else:
+        try:
+            time.sleep(0.2)
+            bot.send_photo(target_id, photo=photo, caption=text)
+        except:
+            pass
+def mailing_to_all(message):
+    user_id = message.from_user.id
+    targets_id = database.mailing_all()
+    if message.text == "Отмена❌":
+        bot.send_message(user_id, "Рассылка отменена", reply_markup=types.ReplyKeyboardRemove())
+    elif message.photo:
+        photo = message.photo[-1].file_id
+        text = message.caption
+        for target_id in targets_id:
+            thread = threading.Thread(target=send_message_to_user, args=(target_id, text, photo))
+            thread.start()
+    else:
+        for target_id in targets_id:
+            text = message.text
+            photo = None
+            thread = threading.Thread(target=send_message_to_user, args=(target_id, text, photo))
+            thread.start()
+    bot.send_message(user_id, "Рассылка завершена", reply_markup=types.ReplyKeyboardRemove())
+def send_answer(message):
+    admin_id = message.from_user.id
+    if message.text == "Отмена❌":
+        bot.send_message(admin_id, "Действие отменено", reply_markup=types.ReplyKeyboardRemove())
+    else:
+        try:
+            user_id = int(message.text)
+            bot.send_message(admin_id, "Введите сообщения для пользователя", reply_markup=buttons.canceling())
+            bot.register_next_step_handler(message, send_full_answer, user_id)
+        except:
+            bot.send_message(admin_id, "Неправильный айди", reply_markup=types.ReplyKeyboardRemove())
+def send_full_answer(message, user_id):
+    admin_id = message.from_user.id
+    if message.text == "Отмена❌":
+        bot.send_message(admin_id, "Действие отменено", reply_markup=types.ReplyKeyboardRemove())
+    elif message.photo:
+        photo = message.photo[-1].file_id
+        bot.send_photo(user_id, photo=photo, caption=message.caption)
+        bot.send_message(admin_id, "Ответ отправлен", reply_markup=types.ReplyKeyboardRemove())
+    else:
+        text = message.text
+        try:
+            bot.send_message(user_id, text)
+            bot.send_message(admin_id, "Ответ отправлен", reply_markup=types.ReplyKeyboardRemove())
+        except:
+            bot.send_message(admin_id, "Не удалось отправить ответ", reply_markup=types.ReplyKeyboardRemove())
 
 bot.infinity_polling()
