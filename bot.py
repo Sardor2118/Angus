@@ -8,7 +8,7 @@ from telebot import types
 logging.basicConfig(level=logging.INFO)
 
 
-bot = telebot.TeleBot('')
+bot = telebot.TeleBot('6986619740:AAFJvNoqZGZZ55C7vlkREEq9wWCQ5Rpll4Y')
 users = {}
 print(database.get_users())
 
@@ -147,20 +147,20 @@ def pay_answer(call):
         bot.send_message(user_id, f'''
         Ваше имя: {database.get_user_name(user_id)[0]};
 Скиньте сумму {users.get(user_id)[0]} в этот кошелёк:
-8600332986772477
+8600332913991927
 Норбобоева Лилия''', reply_markup=buttons.oplata_otmen())
     elif call.data == 'payme':
         bot.send_message(user_id, f'''Ваше имя: {database.get_user_name(user_id)};
 Скиньте сумму {users.get(user_id)[0]} в этот кошелёк:
-8600332986772477
+8600332913991927
 Норбобоева Лилия''', reply_markup=buttons.oplata_otmen())
     elif call.data == 'paynet':
         bot.send_message(user_id, f'''Ваше имя: {database.get_user_name(user_id)};
 Скиньте сумму {users.get(user_id)[0]} в этот кошелёк:
-8600332986772477
+8600332913991927
 Норбобоева Лилия''', reply_markup=buttons.oplata_otmen())
     elif call.data == 'zaplatil':
-        bot.send_message(user_id, "Скиньте чек оплаты сюда: @adminangus 🟢", reply_markup=buttons.oplata())
+        bot.send_message(user_id, "Скиньте чек оплаты сюда: @angusadmin 🟢", reply_markup=buttons.oplata())
     elif call.data == 'otmenit':
         bot.send_photo(user_id, photo=open('photo_2024-02-20_23-47-23.jpg', 'rb'),
                        caption=f'Здравствуйте, дорогой {database.get_user_name(user_id)}! \n'
@@ -197,20 +197,20 @@ def pay_answer(call):
         bot.send_message(user_id, f'''
         Ismingiz: {database.get_user_name(user_id)}
 {users.get(user_id)[0]} miqdorni ushbu hamyonga o'tkazing:
-8600332986772477
+8600332913991927
 Норбобоева Лилия''', reply_markup=buttons.oplata_otmen_uz())
     elif call.data == 'payme_uz':
         bot.send_message(user_id, f'''Ismingiz: {database.get_user_name(user_id)}
 {users.get(user_id)[0]} miqdorni ushbu hamyonga o'tkazing:
-8600332986772477
+8600332913991927
 Норбобоева Лилия''', reply_markup=buttons.oplata_otmen_uz())
     elif call.data == 'paynet_uz':
         bot.send_message(user_id, f'''Ismingiz: {database.get_user_name(user_id)}
 {users.get(user_id)[0]} miqdorni ushbu hamyonga o'tkazing:
-8600332986772477
+8600332913991927
 Норбобоева Лилия''', reply_markup=buttons.oplata_otmen_uz())
     elif call.data == 'toladim':
-        bot.send_message(user_id, text="To'lov chekini ushbu adminga yuboring: @adminangus 🟢",
+        bot.send_message(user_id, text="To'lov chekini ushbu adminga yuboring: @angusadmin 🟢",
                          reply_markup=buttons.oplata_uz())
     elif call.data == 'otmena':
         bot.send_photo(user_id, photo=open('photo_2024-02-20_23-47-23.jpg', 'rb'),
@@ -300,7 +300,7 @@ def main_menu_uz(message):
 def admin_panel(message):
     user_id = message.from_user.id
     types.ReplyKeyboardRemove()
-    if user_id == 1532198392 or user_id == 5692665577:
+    if user_id == 1532198392 or user_id == 795764430:
         bot.send_message(user_id, "Админ панель. Выберите действие",
                          reply_markup=buttons.main_admin_menu())
     else:
