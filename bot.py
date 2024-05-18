@@ -8,7 +8,7 @@ from telebot import types
 logging.basicConfig(level=logging.INFO)
 
 
-bot = telebot.TeleBot('7062808722:AAH5aaI_8jNIKf75WHHtFrACh46uiw6oNuw')
+bot = telebot.TeleBot('')
 users = {}
 print(database.get_users())
 
